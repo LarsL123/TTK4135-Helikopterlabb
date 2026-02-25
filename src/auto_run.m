@@ -1,4 +1,6 @@
-clear
+clear all;
+close all;
+clc;
 %Endre på disse to:
 init_file = "init.m";
 model = 'helicopter';
@@ -6,13 +8,12 @@ model = 'helicopter';
 % For å stoppe fra kommandolinjen:
 % set_param(model, 'SimulationCommand','stop');
 
-% % This part has been moved to the stopfcn:
+% This part has been moved to the stopfcn:
 % % Get next test number and generate a new folder
-% testfolders = dir('Experiment_data*');
+% testfolders = dir('data*');
 % testNumber = length(testfolders) + 1;
-% testName = sprintf('Experiment_data%03d',testNumber);
+% testName = sprintf('data%03d',testNumber);
 % mkdir(testName);
-
 
 % Init, build and run:
 run(init_file)
