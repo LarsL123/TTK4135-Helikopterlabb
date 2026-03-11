@@ -1,0 +1,69 @@
+Lab day 2:
+Problem 3:
+Plot is in template_problem2.m For report, plot with q=0.12, 1.2 and 12
+Notes on this: when q is below 1.2 the input is capped at its constraint nearly instantly. And the response isn't that much better due to this. 
+
+Problem 6:
+    Yes the input trajectory seems reasonable, the system is reaching the setpoint at lambda = 0, and with q = 12 the input is barely reaching it's saturation
+
+Problem 7:
+    The helicopter nearly reaches it's desired point, but quickly drifts away. This is to be expected as there's no feedback in the system.
+
+
+Lab day 3:
+Problem 3:
+    (A) Rather than stabilizing the predicted trajectory x
+∗ with an
+LQ regulator, one can simply re-optimize from the new measured
+position to get a new prediction x
+∗
+new, then apply the newest
+prediction u
+∗
+new to the system.
+ (B) Stabilize the initially predicted trajectory using MPC control
+rather than with LQ regulation.
+
+How would you implement the MPC scheme (A)? Discuss advantages
+and disadvantages with an MPC controller (A) compared to the controller you have implemented (prediction +LQ). Also, what would the
+structure in Figure 8 look like if you used MPC (A).
+
+    We would have a function that makes a new optimal prediction for every timestep. 
+    Advantages to this is that you can get an optimal trajectory no matter where you end up in the future.
+    With the LQR controller might end up taking an "older" optimal route if you for
+    some reason end up far away from the predicted rout.
+    The main disadvantage is the increased computational cost when doing an online optimization.
+
+
+How would you implement the MPC controller (B), and what would
+the structure in Figure 8 look like if you used the MPC scheme (B).
+Here we don’t want a detailed description, but only short explanation.
+What are some advantages and disadvantages of using (B) rather than
+(A)? Can you somehow combine these two approaches?
+
+    Implementing the MPC (B) would be done by having an optimization that runs every timestep, but that uses the pre-calculated trajectory
+    as it's setpoint. This would mean that the controller will prefer the initialy predicted trajectory.
+    You might prefer using B if you want to follow the initially calculated trajectory. 
+You could possibly combine these, by rying to follow the trajectory to some degree.
+
+Test notes:
+    Test, 1, 2, 3 and 4 have: 
+q11 = 1;
+q22 = 1;
+q33 = 1;
+q44 = 1;
+
+R = 1;
+For 1 and 2 the helicopter thinks that it's starting at pi radians but it's starting at 0 so it's trying to correct itself
+We can see a steady-state error in the system. This is due to u* = 0 and the LQR acting as a P controller. 
+Better tuning might be able to counter this to some degree.
+
+Test 5:
+q11 = 1;
+q22 = 1;
+q33 = 1;
+q44 = 1;
+
+R = 0.01;
+
+

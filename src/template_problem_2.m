@@ -1,9 +1,6 @@
 % TTK4135 - Helicopter lab
 % Hints/template for problem 2.
 % Updated spring 2018, Andreas L. Flåten
-clear all;
-close all;
-clc;
 %% Initialization and model definition
 init; % Change this to the init file corresponding to your helicopter
 
@@ -52,7 +49,7 @@ Q1(1,1) = 2;                            % Weight on state x1
 Q1(2,2) = 0;                            % Weight on state x2
 Q1(3,3) = 0;                            % Weight on state x3
 Q1(4,4) = 0;                            % Weight on state x4
-P1 = 0.12;                                % Weight on input
+P1 = 1;                                % Weight on input
 Q = gen_q(Q1,P1,N,M);                                  % Generate Q, hint: gen_q
 c = zeros(mx*N+M*mu,1);                                  % Generate c, this is the linear constant term in the QP
 
@@ -94,6 +91,11 @@ x4  = [zero_padding; x4; zero_padding];
 %% Plotting
 t = 0:delta_t:delta_t*(length(u)-1);
 
+u_timeseries = timeseries(u,t);
+x1_timeseries = timeseries(x1,t);
+x2_timeseries = timeseries(x2,t);
+x3_timeseries = timeseries(x3,t);
+x4_timeseries = timeseries(x4,t);
 figure(2)
 subplot(511)
 stairs(t,u),grid
