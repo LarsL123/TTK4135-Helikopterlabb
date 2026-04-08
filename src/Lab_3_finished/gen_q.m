@@ -1,4 +1,4 @@
-function Q = gen_q(Q1,P1,P2,N,M)
+function Q = gen_q(Q1,P1,N,M)
 % Function to build a matrix Q that has the following form: 
 %      -           -                                            
 %      |Q1         |                                         Kommentaren er misvisende:(   
@@ -19,5 +19,5 @@ function Q = gen_q(Q1,P1,P2,N,M)
 % January 2018, Andreas L. Flåten (translated to English)
 q1	= diag_repeat(Q1,N);
 p1	= diag_repeat(P1,M);
-p2  = diag_repeat(P2,M);
-Q	= blkdiag(q1,p1, p2); 
+
+Q	= blkdiag(q1,p1); 

@@ -1,16 +1,19 @@
 % TTK4135 - Helicopter lab
 % Hints/template for problem 2.
-% Updated spring 2018, Andreas L. Flåten
+% Updated spring 2018, Andreas L. FlÃ¥ten
 %% Initialization and model definition
 init; % Change this to the init file corresponding to your helicopter
 
-% Discrete time system model. x = [lambda r p p_dot]'
+% Discrete time system model. x = [lambda r p p_dot e e_dot]'
 delta_t	= 0.25; % sampling time
-A1 = [1 delta_t 0 0;
-      0 1 -delta_t*K_2 0;
-      0 0 1 delta_t
-      0 0 (-delta_t*K_1*K_pp) (1-delta_t*K_1*K_pd)];
-B1 = [0 0 0 delta_t*K_1*K_pp]';
+A1 = [1 delta_t 0 0 0 0;
+      0 1 -delta_t*K_2 0 0 0;
+      0 0 1 delta_t 0 0;
+      0 0 (-delta_t*K_1*K_pp) (1-delta_t*K_1*K_pd) 0 0;
+      0 0 0 0 1 delta_t;
+      0 0 0 0 -K_3*K_ep*delta_t (1-K_3*K_ed*delta_t)];
+B1 = [0 0 0 delta_t*K_1*K_pp 0 0;
+      0 0 0 0 0 K_3*K_ep*delta_t]';
 
 % Number of states and inputs
 mx = size(A1,2); % Number of states (number of columns in A)
@@ -21,10 +24,12 @@ x1_0 = pi;                               % Lambda
 x2_0 = 0;                               % r
 x3_0 = 0;                               % p
 x4_0 = 0;                               % p_dot
-x0 = [x1_0 x2_0 x3_0 x4_0]';           % Initial values
+x5_0 = 0;
+x6_0 = 0;
+x0 = [x1_0 x2_0 x3_0 x4_0 x5_0 x6_0]';           % Initial values
 
 % Time horizon and initialization
-N  = 100;                                  % Time horizon for states
+N  = 40;                                  % Time horizon for states
 M  = N;                                 % Time horizon for inputs
 z  = zeros(N*mx+M*mu,1);                % Initialize z for the whole horizon
 z0 = z;                                 % Initial value for optimization
@@ -49,17 +54,23 @@ Q1(1,1) = 2;                            % Weight on state x1
 Q1(2,2) = 0;                            % Weight on state x2
 Q1(3,3) = 0;                            % Weight on state x3
 Q1(4,4) = 0;                            % Weight on state x4
-P1 = 1;                                % Weight on input
-Q = gen_q(Q1,P1,N,M);                                  % Generate Q, hint: gen_q
+Q1(5,5) = 0;
+Q1(6,6) = 0;
+P1 = 1;                                 % Weight on input
+P2 = 1;
+Q = gen_q(Q1,P1,P2,N,M);                                  % Generate Q, hint: gen_q
 c = zeros(mx*N+M*mu,1);                                  % Generate c, this is the linear constant term in the QP
 
 %% Generate system matrixes for linear model
 Aeq = gen_aeq(A1, B1, N, mx,mu);             % Generate A, hint: gen_aeq
-beq = zeros(N*mx,1);             % Generate b CHECK HERE
+beq = zeros(N*mx,1);                         % Generate b CHECK HERE
 beq(1,1) = x1_0; %+delta_t*x1_0; 
+
+fun = @(x)x'*Q*x;
+
 %% Solve QP problem with linear model
 tic
-[z,lambda] =  quadprog(Q,c,[],[],Aeq,beq,vlb,vub) ; % hint: quadprog. Type 'doc quadprog' for more info 
+[z,lambda] =  fmincon(fun,z0,[],[],Aeq,beq,vlb,vub,@(x) non_linear_constraint(x,z0));%quadprog(Q,c,[],[],Aeq,beq,vlb,vub) ; % hint: quadprog. Type 'doc quadprog' for more info 
 t1=toc;
 
 % Calculate objective value

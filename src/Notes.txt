@@ -66,4 +66,14 @@ q44 = 1;
 
 R = 0.01;
 
+Test 6:
+q11 = 1;
+q22 = 1;
+q33 = 1;
+q44 = 1;
+
+R = 100;
+
+In this test we had a slow response with a lot of overshoot.
+
 
