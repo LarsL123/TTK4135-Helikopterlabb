@@ -77,3 +77,38 @@ R = 100;
 In this test we had a slow response with a lot of overshoot.
 
 
+------LAB 4 -----------
+Test 1 with feedback:
+q11 = 1;
+q22 = 1;
+q33 = 1;
+q44 = 1;
+q55 = 1;
+q66 = 1;
+r1 = 0.1;
+r2 = 0.1;
+
+Answer to question 10.4.1.5:
+Yes, it seems reasonable.
+Test 2:
+q11 = 5;
+q22 = 1;
+q33 = 1;
+q44 = 0.5;
+q55 = 30;
+q66 = 10;
+r1 = 0.1;
+r2 = 0.1;
+
+Test 1 and 2 was fucked ( u = u* - K(x*-x) was not correct) 
+Test 3:
+q11 = 5;
+q22 = 1;
+q33 = 1;
+q44 = 0.5;
+q55 = 30;
+q66 = 10;
+r1 = 0.1;
+r2 = 0.1;
+
+Test 4:
