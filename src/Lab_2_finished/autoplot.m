@@ -2,7 +2,7 @@ folders = dir('data*');
 last_folder = folders(end);
 % Uncomment here to choose custom folder:
 % last_folder = Experiment_data001
-latest_test = last_folder.name;
+latest_test = 'data003'
 filePattern = fullfile(pwd,latest_test);
 matfiles = dir(fullfile(latest_test, '*.mat'));
 dataStruct = struct();
@@ -33,7 +33,7 @@ for k = 1:length(fields)
     fig = figure(k);
     hold on
     for r = signalRows
-        plot(timeVec,dataArray(r,:));
+        plot(timeVec,dataArray(r,:)*2*pi/360 + pi);
         % TODO: finne løsning med legends
     end
     hold off
